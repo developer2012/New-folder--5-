@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChatGPT Google Qidiruv Chat</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: 
+                linear-gradient(120deg, #232526 0%, #414345 100%),
+                linear-gradient(135deg, #e0eafc 0%, #cfdef3 100%),
+                linear-gradient(150deg, #ffffff 0%, #e3e3e3 100%),
+                linear-gradient(160deg, #f7971e 0%, #ffd200 100%),
+                linear-gradient(170deg, #ff6a00 0%, #ee0979 100%),
+                linear-gradient(180deg, #232526 0%, #414345 100%),
+                linear-gradient(200deg, #e0eafc 0%, #cfdef3 100%),
+                linear-gradient(210deg, #232526 0%, #414345 100%),
+                linear-gradient(220deg, #f7971e 0%, #ffd200 100%),
+                linear-gradient(230deg, #ff6a00 0%, #ee0979 100%),
+                linear-gradient(240deg, #232526 0%, #414345 100%),
+                linear-gradient(250deg, #e0eafc 0%, #cfdef3 100%);
+            background-blend-mode: screen, overlay, lighten, multiply, screen, overlay, lighten, multiply, screen, overlay, lighten, multiply;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            min-height: 100vh;
+            box-sizing: border-box;
+            overflow-x: hidden;
+        }
+        /* --- CSS above --- */
+        </style>
+        </head>
+        <body>
+        <div class="container" style="max-width:480px;margin:40px auto 0 auto;padding:0 0 24px 0;background:rgba(255,255,255,0.07);border-radius:18px;box-shadow:0 8px 32px 0 rgba(31,38,135,0.37);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,0.18);">
+            <div style="padding:32px 24px 16px 24px;">
+            <h2 style="margin:0 0 8px 0;font-weight:700;font-size:2rem;color:#fff;text-shadow:0 2px 8px #232526;">ChatGPT Google Qidiruv Chat</h2>
+            <p style="margin:0 0 16px 0;color:#dbeafe;font-size:1rem;">Savolingizni yozing va Google natijasini oling!</p>
+            </div>
+            <div class="chat-messages" style="height:340px;overflow-y:auto;padding:0 24px 0 24px;scroll-behavior:smooth;background:rgba(0,0,0,0.08);border-radius:12px;margin:0 16px 0 16px;"></div>
+            <div style="display:flex;align-items:center;gap:8px;padding:24px 24px 0 24px;">
+            <textarea class="chat-input" placeholder="Savolingizni yozing..." style="flex:1;resize:none;min-height:44px;max-height:120px;padding:12px 16px;border-radius:12px;border:none;background:rgba(255,255,255,0.13);color:#232526;font-size:1rem;box-shadow:0 2px 8px rgba(0,0,0,0.06);outline:none;transition:background 0.2s;"></textarea>
+            <button class="send-btn" style="padding:0 20px;height:44px;border:none;border-radius:12px;background:linear-gradient(90deg,#2563eb 0%,#0ea5e9 100%);color:#fff;font-weight:600;font-size:1.1rem;cursor:pointer;box-shadow:0 2px 8px rgba(37,99,235,0.13);transition:background 0.2s;">Yuborish</button>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 24px 0 24px;">
+            <button class="clear-btn" style="background:linear-gradient(90deg,#232526 0%,#414345 100%);color:#fff;border:none;border-radius:10px;padding:6px 16px;font-size:0.95rem;cursor:pointer;transition:background 0.2s;">Tozalash</button>
+            <span style="color:#a5b4fc;font-size:0.95rem;">GitHub Copilot</span>
+            </div>
+        </div>
+        <script>
+        // Chat message data
+        let messages = [
+            {role: 'bot', text: "Salom! Men ChatGPT Google Qidiruv Chatman. Savolingizni yozing."}
+        ];
+
+        // DOM elements
+        let chatMessages, chatInput;
+
+        // Helper: create message HTML
+        function createMessageHTML(msg) {
+            const avatar = msg.role === 'user' ? 'S' : '🤖';
+            const roleClass = msg.role === 'user' ? 'user' : 'bot';
+            return `
+            <div class="message ${roleClass}">
+            <div class="avatar">${avatar}</div>
+            <div class="bubble">${msg.text}</div>
+            </div>
+            `;
+        }
+
+        // Render all messages
+        function renderMessages() {
+            chatMessages.innerHTML = messages.map(createMessageHTML).join('');
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        // Simulate Google search (mock)
+        function googleSearch(query) {
+            // Random mock responses
+            const responses = [
+            `Google natijasi: "${query}" haqida ko'plab ma'lumotlar topildi.`,
+            `Siz so'ragan "${query}" bo'yicha quyidagilar topildi...`,
+            `Google: "${query}" uchun eng yaxshi natijalar quyidagilar: ...`,
+            `"${query}" bo'yicha eng so'nggi yangiliklar va ma'lumotlar: ...`,
+            `Qidiruv natijasi: "${query}" haqida batafsil ma'lumotlar mavjud.`
+            ];
+            return responses[Math.floor(Math.random() * responses.length)];
+        }
+
+        // Add message and respond
+        function handleUserInput() {
+            const text = chatInput.value.trim();
+            if (!text) return;
+            messages.push({role: 'user', text});
+            renderMessages();
+            chatInput.value = '';
+            setTimeout(() => {
+            // Simulate "typing"
+            addBotTyping();
+            setTimeout(() => {
+            removeBotTyping();
+            let reply = handleSpecialCommands(text);
+            if (!reply) {
+            reply = googleSearch(text);
+            }
+            messages.push({role: 'bot', text: reply});
+            renderMessages();
+            }, 1200 + Math.random() * 800);
+            }, 400);
+        }
+
+        // Add typing indicator
+        function addBotTyping() {
+            const typingMsg = {role: 'bot', text: "<i>Yozilmoqda...</i>", typing: true};
+            messages.push(typingMsg);
+            renderMessages();
+        }
+
+        // Remove typing indicator
+        function removeBotTyping() {
+            messages = messages.filter(m => !m.typing);
+        }
+
+        // Keyboard shortcuts
+        function handleKeyDown(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            handleUserInput();
+            }
+        }
+
+        // Save/load chat to localStorage
+        function saveChat() {
+            localStorage.setItem('chatgpt_google_chat', JSON.stringify(messages));
+        }
+        function loadChat() {
+            const saved = localStorage.getItem('chatgpt_google_chat');
+            if (saved) {
+            messages = JSON.parse(saved);
+            }
+        }
+
+        // Clear chat
+        function clearChat() {
+            if (confirm("Haqiqatan ham chatni tozalamoqchimisiz?")) {
+            messages = [
+            {role: 'bot', text: "Salom! Men ChatGPT Google Qidiruv Chatman. Savolingizni yozing."}
+            ];
+            renderMessages();
+            saveChat();
+            }
+        }
+
+        // Add 30+ random bot functions for demo
+        function randomFact() {
+            const facts = [
+            "Yer yuzida eng ko'p gapiriladigan til - mandarin xitoy tili.",
+            "Delfinlar bir-biri bilan ism orqali chaqirishadi.",
+            "Odam tanasidagi eng katta organ - teri.",
+            "Google 1998-yilda tashkil topgan.",
+            "HTML - HyperText Markup Language degani.",
+            "Dunyodagi eng baland tog' - Everest.",
+            "Eng tez hayvon - gepard.",
+            "Dunyoda eng ko'p ishlatiladigan valyuta - AQSh dollari.",
+            "Odam miyasi taxminan 75% suvdan iborat.",
+            "Eng katta okean - Tinch okeani.",
+            "JavaScript dasturlash tili 1995-yilda yaratilgan.",
+            "Dunyodagi eng uzun daryo - Nil.",
+            "Eng ko'p foydalanuvchiga ega ijtimoiy tarmoq - Facebook.",
+            "Kompyuter viruslari dastlab o'yin sifatida yaratilgan.",
+            "Eng tez o'sadigan o'simlik - bambuk.",
+            "Dunyodagi eng kichik qush - kolibri.",
+            "Eng qadimgi yozuv - mixxat yozuvi.",
+            "Dunyodagi eng katta orol - Grenlandiya.",
+            "Eng ko'p gapiriladigan ikkinchi til - ispan tili.",
+            "Dunyodagi eng katta cho'l - Sahara.",
+            "Odam tanasida 206 ta suyak bor.",
+            "Eng ko'p ishlatiladigan parol - '123456'.",
+            "Dunyodagi eng katta hayvon - ko'k kit.",
+            "Eng qadimgi shahar - Damashq.",
+            "Dunyodagi eng baland binosi - Burj Khalifa.",
+            "Eng ko'p ishlatiladigan brauzer - Chrome.",
+            "Dunyodagi eng uzun ko'prik - Danyang-Kunshan.",
+            "Eng ko'p ishlatiladigan operatsion tizim - Windows.",
+            "Dunyodagi eng katta stadion - Rungrado 1st of May.",
+            "Eng ko'p ishlatiladigan email xizmati - Gmail."
+            ];
+            return facts[Math.floor(Math.random() * facts.length)];
+        }
+        function botTime() {
+            const now = new Date();
+            return "Hozirgi vaqt: " + now.toLocaleTimeString();
+        }
+        function botDate() {
+            const now = new Date();
+            return "Bugungi sana: " + now.toLocaleDateString();
+        }
+        function botWeather() {
+            const weathers = [
+            "Ob-havo: Quyoshli, 25°C (demo).",
+            "Ob-havo: Yomg'irli, 18°C (demo).",
+            "Ob-havo: Bulutli, 20°C (demo).",
+            "Ob-havo: Qorli, -2°C (demo)."
+            ];
+            return weathers[Math.floor(Math.random() * weathers.length)];
+        }
+        function botJoke() {
+            const jokes = [
+            "Nega kompyuter sovuq? Chunki u Windows ochiq!",
+            "Programmistlar kofeni yaxshi ko'radi, chunki ular kod yozadi.",
+            "AI hazili: Men hazil qilolmayman, lekin harakat qilaman!",
+            "Nega JavaScript developeri suv ichmaydi? Chunki u 'null' ichadi.",
+            "Nega Python ilon emas? Chunki u kod yozadi!"
+            ];
+            return jokes[Math.floor(Math.random() * jokes.length)];
+        }
+        function botHelp() {
+            return "Savolingizni yozing yoki: vaqt, sana, hazil, ob-havo, fakt, random, yordam, aloqa, dasturchi, til, demo, smile, sad, like, dislike so'rang.";
+        }
+        function botGreet() {
+            return "Assalomu alaykum! Yordam bera olamanmi?";
+        }
+        function botBye() {
+            return "Xayr! Yana ko'rishguncha!";
+        }
+        function botThanks() {
+            return "Sizga yordam bera olganimdan xursandman!";
+        }
+        function botAbout() {
+            return "Men ChatGPT Google Qidiruv Chatman. Sizga yordam bera olaman!";
+        }
+        function botDev() {
+            return "Dasturchi: GitHub Copilot yordamida yaratilgan.";
+        }
+        function botLang() {
+            return "Men HTML, CSS, JS va AI haqida gaplasha olaman.";
+        }
+        function botAI() {
+            return "AI - Sun'iy intellekt, ya'ni mashina orqali aql.";
+        }
+        function botSearchDemo() {
+            return "Google qidiruv natijalari faqat demo uchun.";
+        }
+        function botContact() {
+            return "Aloqa: github.com";
+        }
+        function botSmile() {
+            return "😊";
+        }
+        function botSad() {
+            return "😔";
+        }
+        function botLike() {
+            return "👍";
+        }
+        function botDislike() {
+            return "👎";
+        }
+        function botRandom() {
+            const arr = [botTime, botDate, botWeather, botJoke, botFact, botSmile, botSad, botLike, botDislike, botAbout, botDev, botLang, botAI, botSearchDemo, botContact];
+            return arr[Math.floor(Math.random() * arr.length)]();
+        }
+        function botFact() {
+            return randomFact();
+        }
+        function botReverse(text) {
+            return "Teskari: " + text.split('').reverse().join('');
+        }
+        function botUpper(text) {
+            return "Katta harflar: " + text.toUpperCase();
+        }
+        function botLower(text) {
+            return "Kichik harflar: " + text.toLowerCase();
+        }
+        function botLength(text) {
+            return `"${text}" uzunligi: ` + text.length + " ta belgi.";
+        }
+        function botEcho(text) {
+            return "Siz yozdingiz: " + text;
+        }
+        function botCharCount(text) {
+            return "Belgilar soni: " + text.replace(/\s/g, '').length;
+        }
+        function botWordCount(text) {
+            return "So'zlar soni: " + text.trim().split(/\s+/).length;
+        }
+        function botIsPalindrome(text) {
+            const clean = text.replace(/[\W_]/g, '').toLowerCase();
+            const isPal = clean === clean.split('').reverse().join('');
+            return isPal ? "Bu matn palindrom." : "Bu matn palindrom emas.";
+        }
+        function botRandomNumber() {
+            return "Tasodifiy son: " + Math.floor(Math.random() * 1000);
+        }
+        function botDayOfWeek() {
+            const days = ['Yakshanba', 'Dushanba', 'Seshanba', 'Chorshanba', 'Payshanba', 'Juma', 'Shanba'];
+            return "Bugun: " + days[new Date().getDay()];
+        }
+        function botMonth() {
+            const months = ['Yanvar', 'Fevral', 'Mart', 'Aprel', 'May', 'Iyun', 'Iyul', 'Avgust', 'Sentabr', 'Oktabr', 'Noyabr', 'Dekabr'];
+            return "Oy: " + months[new Date().getMonth()];
+        }
+        function botYear() {
+            return "Yil: " + new Date().getFullYear();
+        }
+        function botGreetingByTime() {
+            const h = new Date().getHours();
+            if (h < 12) return "Xayrli tong!";
+            if (h < 18) return "Xayrli kun!";
+            return "Xayrli kech!";
+        }
+        function botRandomEmoji() {
+            const emojis = ["😀","😂","😎","😍","🤖","👍","🎉","🔥","💡","🚀"];
+            return emojis[Math.floor(Math.random() * emojis.length)];
+        }
+        function botRandomColor() {
+            const colors = ["Qizil", "Ko'k", "Yashil", "Sariq", "To'q sariq", "Qora", "Oq", "Pushti"];
+            return "Tasodifiy rang: " + colors[Math.floor(Math.random() * colors.length)];
+        }
+        function botRandomAnimal() {
+            const animals = ["It", "Mushuk", "Quyon", "Ot", "Fil", "Sher", "Qush", "Baliq"];
+            return "Tasodifiy hayvon: " + animals[Math.floor(Math.random() * animals.length)];
+        }
+        function botRandomCountry() {
+            const countries = ["O'zbekiston", "AQSh", "Xitoy", "Rossiya", "Hindiston", "Braziliya", "Fransiya", "Germaniya"];
+            return "Tasodifiy davlat: " + countries[Math.floor(Math.random() * countries.length)];
+        }
+        function botRandomCity() {
+            const cities = ["Toshkent", "London", "Nyu-York", "Tokio", "Parij", "Berlin", "Moskva", "Pekin"];
+            return "Tasodifiy shahar: " + cities[Math.floor(Math.random() * cities.length)];
+        }
+        function botRandomProgrammingLang() {
+            const langs = ["JavaScript", "Python", "Java", "C#", "C++", "Go", "Rust", "PHP"];
+            return "Tasodifiy dasturlash tili: " + langs[Math.floor(Math.random() * langs.length)];
+        }
+        function botRandomFramework() {
+            const frameworks = ["React", "Vue", "Angular", "Svelte", "Django", "Flask", "Laravel", "Spring"];
+            return "Tasodifiy framework: " + frameworks[Math.floor(Math.random() * frameworks.length)];
+        }
+        function botRandomOS() {
+            const oss = ["Windows", "macOS", "Linux", "Android", "iOS"];
+            return "Tasodifiy operatsion tizim: " + oss[Math.floor(Math.random() * oss.length)];
+        }
+        function botRandomBrowser() {
+            const browsers = ["Chrome", "Firefox", "Safari", "Edge", "Opera"];
+            return "Tasodifiy brauzer: " + browsers[Math.floor(Math.random() * browsers.length)];
+        }
+        function botRandomIDE() {
+            const ides = ["VS Code", "IntelliJ IDEA", "PyCharm", "WebStorm", "Eclipse", "NetBeans"];
+            return "Tasodifiy IDE: " + ides[Math.floor(Math.random() * ides.length)];
+        }
+        function botRandomFood() {
+            const foods = ["Palov", "Lag'mon", "Pizza", "Burger", "Sushi", "Osh", "Shashlik"];
+            return "Tasodifiy taom: " + foods[Math.floor(Math.random() * foods.length)];
+        }
+        function botRandomSport() {
+            const sports = ["Futbol", "Basketbol", "Tennis", "Boks", "Suzish", "Shaxmat"];
+            return "Tasodifiy sport turi: " + sports[Math.floor(Math.random() * sports.length)];
+        }
+        function botRandomCar() {
+            const cars = ["Tesla", "BMW", "Mercedes", "Toyota", "Chevrolet", "Lamborghini"];
+            return "Tasodifiy mashina: " + cars[Math.floor(Math.random() * cars.length)];
+        }
+        function botRandomPhone() {
+            const phones = ["iPhone", "Samsung", "Xiaomi", "Huawei", "OnePlus"];
+            return "Tasodifiy telefon: " + phones[Math.floor(Math.random() * phones.length)];
+        }
+        function botRandomBook() {
+            const books = ["Alkimyogar", "1984", "Ufq", "Sherlok Xolms", "Harry Potter"];
+            return "Tasodifiy kitob: " + books[Math.floor(Math.random() * books.length)];
+        }
+        function botRandomMovie() {
+            const movies = ["Titanic", "Inception", "Avatar", "Matrix", "Interstellar"];
+            return "Tasodifiy film: " + movies[Math.floor(Math.random() * movies.length)];
+        }
+
+        // Detect special commands
+        function handleSpecialCommands(text) {
+            const t = text.toLowerCase();
+            if (t.includes('vaqt')) return botTime();
+            if (t.includes('sana')) return botDate();
+            if (t.includes('hazil')) return botJoke();
+            if (t.includes('ob-havo')) return botWeather();
+            if (t.includes('fakt')) return botFact();
+            if (t.includes('yordam')) return botHelp();
+            if (t.includes('salom')) return botGreet();
+            if (t.includes('xayr')) return botBye();
+            if (t.includes('rahmat')) return botThanks();
+            if (t.includes('haqida')) return botAbout();
+            if (t.includes('dasturchi')) return botDev();
+            if (t.includes('til')) return botLang();
+            if (t.includes('ai')) return botAI();
+            if (t.includes('demo')) return botSearchDemo();
+            if (t.includes('aloqa')) return botContact();
+            if (t.includes('smile')) return botSmile();
+            if (t.includes('sad')) return botSad();
+            if (t.includes('like')) return botLike();
+            if (t.includes('dislike')) return botDislike();
+            if (t.includes('random')) return botRandom();
+            if (t.includes('teskari')) return botReverse(text);
+            if (t.includes('katta')) return botUpper(text);
+            if (t.includes('kichik')) return botLower(text);
+            if (t.includes('uzunlik')) return botLength(text);
+            if (t.includes('echo')) return botEcho(text);
+            if (t.includes('belgi')) return botCharCount(text);
+            if (t.includes('so\'z')) return botWordCount(text);
+            if (t.includes('palindrom')) return botIsPalindrome(text);
+            if (t.includes('son')) return botRandomNumber();
+            if (t.includes('kun')) return botDayOfWeek();
+            if (t.includes('oy')) return botMonth();
+            if (t.includes('yil')) return botYear();
+            if (t.includes('salomlash')) return botGreetingByTime();
+            if (t.includes('emoji')) return botRandomEmoji();
+            if (t.includes('rang')) return botRandomColor();
+            if (t.includes('hayvon')) return botRandomAnimal();
+            if (t.includes('davlat')) return botRandomCountry();
+            if (t.includes('shahar')) return botRandomCity();
+            if (t.includes('dasturlash')) return botRandomProgrammingLang();
+            if (t.includes('framework')) return botRandomFramework();
+            if (t.includes('os')) return botRandomOS();
+            if (t.includes('brauzer')) return botRandomBrowser();
+            if (t.includes('ide')) return botRandomIDE();
+            if (t.includes('taom')) return botRandomFood();
+            if (t.includes('sport')) return botRandomSport();
+            if (t.includes('mashina')) return botRandomCar();
+            if (t.includes('telefon')) return botRandomPhone();
+            if (t.includes('kitob')) return botRandomBook();
+            if (t.includes('film')) return botRandomMovie();
+            return null;
+        }
+
+        // On DOM loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            chatMessages = document.querySelector('.chat-messages');
+            chatInput = document.querySelector('.chat-input');
+            const sendBtn = document.querySelector('.send-btn');
+            const clearBtn = document.querySelector('.clear-btn');
+
+            // Load chat
+            loadChat();
+            renderMessages();
+
+            // Send button
+            sendBtn.addEventListener('click', handleUserInput);
+
+            // Input enter
+            chatInput.addEventListener('keydown', handleKeyDown);
+
+            // Save on change
+            chatInput.addEventListener('input', saveChat);
+
+            // Clear chat
+            if (clearBtn) clearBtn.addEventListener('click', clearChat);
+
+            // Save chat on message
+            const observer = new MutationObserver(saveChat);
+            observer.observe(chatMessages, {childList: true, subtree: true});
+        });
+        </script>
+        <style>
+        .message {
+            display: flex;
+            align-items: flex-end;
+            margin: 16px 0;
+        }
+        .message.user {
+            flex-direction: row-reverse;
+        }
+        .avatar {
+            width: 38px;
+            height: 38px;
+            background: linear-gradient(135deg,#2563eb 0%,#0ea5e9 100%);
+            color: #fff;
+            font-size: 1.5rem;
+            font-weight: bold;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 10px;
+            box-shadow: 0 2px 8px rgba(37,99,235,0.13);
+            user-select: none;
+        }
+        .message.user .avatar {
+            background: linear-gradient(135deg,#232526 0%,#414345 100%);
+        }
+        .bubble {
+            padding: 14px 18px;
+            border-radius: 16px;
+            background: linear-gradient(90deg,#e0eafc 0%,#cfdef3 100%);
+            color: #232526;
+            font-size: 1.08rem;
+            max-width: 80vw;
+            min-width: 60px;
+            word-break: break-word;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+            border: 1px solid rgba(0,0,0,0.04);
+        }
+        .message.user .bubble {
+            background: linear-gradient(90deg,#2563eb 0%,#0ea5e9 100%);
+            color: #fff;
+        }
+        .chat-messages::-webkit-scrollbar {
+            width: 7px;
+            background: rgba(0,0,0,0.04);
+        }
+        .chat-messages::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg,#2563eb 0%,#0ea5e9 100%);
+            border-radius: 8px;
+        }
+        .chat-input:focus {
+            background: rgba(255,255,255,0.22);
+        }
+        .send-btn:hover {
+            background: linear-gradient(90deg,#0ea5e9 0%,#2563eb 100%);
+            filter: brightness(1.08);
+        }
+        .clear-btn:hover {
+            background: linear-gradient(90deg,#414345 0%,#232526 100%);
+            filter: brightness(1.08);
+        }
+        @media (max-width: 600px) {
+            .container {
+            margin: 0;
+            border-radius: 0;
+            max-width: 100vw;
+            }
+            .chat-messages {
+            height: 260px;
+            }
+        }
+        </style>
+        </body>
+    </html>
